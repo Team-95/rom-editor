@@ -1,0 +1,75 @@
+
+<div class="container" style="padding-top:35px;">
+  
+  <form #form="ngForm" (ngSubmit)="submit(form)">
+
+    <div class="form-group">
+      <label for="inputRom">Input Rom</label>
+      <div class="clearfix"></div>
+      <div class="file-section">
+        <input type="file" id="inputRomFile" (change)="handleInputFileChange($event)"> 
+        <span class="btn btn-info">Select File</span>
+      </div>
+      <input id="inputRom" type="text" class="form-control" name="inputRom" class="file-value form-control"
+      [(ngModel)]="inputPath"
+      #inputRom="ngModel"
+      required/>
+      <div class="alert alert-danger" *ngIf="inputRom.invalid && inputRom.touched">
+        <div *ngIf="inputRom.errors.required">Input file path is required</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="outputRom">Output Rom</label>
+      <div class="clearfix"></div>
+      <div class="file-section">
+        <input type="file" id="outputRomFile" (change)="handleOutputFileChange($event)"> 
+        <span class="btn btn-info">Select File</span>
+      </div>
+      <input id="outputRom" type="text" class="form-control" name="outputRom" class="file-value form-control"
+      [(ngModel)]="outputPath"
+      #outputRom="ngModel"
+      required/>
+      <div class="alert alert-danger" *ngIf="outputRom.invalid && outputRom.touched">
+        <div *ngIf="outputRom.errors.required">Output file path is required</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="teamStats">Team Stats</label>
+      <div class="clearfix"></div>
+      <div class="file-section">
+        <input type="file" id="teamStatsFile" (change)="handleTeamStatsFileChange($event)"> 
+        <span class="btn btn-info">Select File</span>
+      </div>
+      <input id="teamStats" type="text" class="form-control" name="teamStats" class="file-value form-control"
+      [(ngModel)]="teamStatsPath"
+      #teamStats="ngModel"
+      required/>
+      <div class="alert alert-danger" *ngIf="teamStats.invalid && teamStats.touched">
+        <div *ngIf="teamStats.errors.required">Team stats file path is required</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="playerStats">Player Stats</label>
+      <div class="clearfix"></div>
+      <div class="file-section">
+        <input type="file" id="playerStatsFile" (change)="handlePlayerStatsFileChange($event)"> 
+        <span class="btn btn-info">Select File</span>
+      </div>
+      <input id="playerStats" type="text" class="form-control" name="playerStats" class="file-value form-control"
+      [(ngModel)]="playerStatsPath"
+      #playerStats="ngModel"
+      required/>
+      <div class="alert alert-danger" *ngIf="playerStats.invalid && playerStats.touched">
+        <div *ngIf="playerStats.errors.required">Player stats file path is required</div>
+      </div>
+    </div>
+  
+    <button class="btn btn-primary" [disabled]="!form.valid">Apply</button>
+  </form>
+
+  <button class="btn btn-primary" (click)="launch()" [disabled]="!lastSuccessfulOutput">Launch</button>
+
+</div>
