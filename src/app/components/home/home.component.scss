@@ -6,9 +6,59 @@ input[type='file'] {
 }
 
 .file-section{
-  width:96px; display:inline-block; position:relative;
+  width:96px;
+  display:inline-block;
+  position:relative;
+  cursor: pointer;
+
+  input{
+    cursor: pointer;
+  }
+  span{
+    cursor: pointer;
+  }
 }
 
 .file-value{
   width:calc(100% - 100px); display:inline-block
+}
+
+#left-panel{
+  width:150px;
+  background-color: #282A29;
+  height: 100%;
+  float: left;
+}
+
+#content-area{
+  height: 100%;
+  width: calc(100% - 150px);
+  overflow: auto;
+  padding:30px;
+}
+
+#app-body{
+  height: calc(100% - 32px);
+}
+
+.nav-tabs {
+    border: none;
+}
+
+.nav-tabs > li > a {
+    border-radius: 0 0 0 0;
+}
+
+.nav > li > a:focus {
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.panel-group{
+  height: 100%;
+  margin-bottom: 0 !important;
+}
+
+li{
+  cursor: pointer;
 }

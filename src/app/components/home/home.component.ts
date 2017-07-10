@@ -3,6 +3,12 @@ import addon from '../../addon';
 
 const { exec } = require('child_process');
 
+enum MenuItem {
+  ROM = 1,
+  Stats = 2,
+  Emulator = 3
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -16,6 +22,9 @@ export class HomeComponent implements OnInit {
   teamStatsPath: String;
 
   lastSuccessfulOutput: String;
+
+  sectionEnum = MenuItem;
+  selectedSection: MenuItem = MenuItem.ROM;
 
   constructor() { }
 
@@ -70,6 +79,10 @@ export class HomeComponent implements OnInit {
       console.log(`stdout: ${stdout}`);
       console.log(`stderr: ${stderr}`);
     });
+  }
+
+  handleSectionClick(choice: MenuItem){
+    this.selectedSection = choice;
   }
 
 }
