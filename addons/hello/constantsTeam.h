@@ -63,6 +63,7 @@
 #define T_STARSWEST 0x001F7C2A
 #define T_SLAMMERS 0x001F80AC
 
+#define M_0 0x00037ECE
 #define M_1 0x00037ED2
 #define M_2 0x00037ED6
 #define M_3 0x00037EDA
@@ -93,6 +94,7 @@
 #define M_28 0x00037F3E
 #define M_29 0x00037F52
 
+#define T_0 0x0003FEB4
 #define T_1 0x0004031A
 #define T_2 0x00040788
 #define T_3 0x00040C1A

@@ -20,19 +20,46 @@ using v8::Local;
 using v8::Object;
 using v8::String;
 using v8::Value;
+using v8::Array;
+using v8::Number;
+
+bool VerifyParameters(const FunctionCallbackInfo<Value>& args, int count)
+{
+	Isolate* isolate = args.GetIsolate();
+
+  	if(args.Length() != count)
+  	{
+    	isolate->ThrowException(Exception::TypeError(
+        	String::NewFromUtf8(isolate, "Wrong number of arguments")));
+    	return false;
+  	}
+
+  	for(int i = 0; i < count; i++)
+  	{
+		if(!args[i]->IsString())
+		{
+			isolate->ThrowException(Exception::TypeError(
+        		String::NewFromUtf8(isolate, "Wrong arguments")));
+    		return false;
+		}
+  	}
+
+
+	return true;
+}
 
 int Apply(const char* inPath, const char* teamStatsPath, const char* playerStatsPath, const char* outPath)
 {
-  std::ofstream logFile("logfile.txt");
-  logFile << "set method called" << endl;
+	std::ofstream logFile("logfile.txt");
+	logFile << "set method called" << endl;
 	FILE *tempRead;
 	FILE* romRead;
 	FILE* romWrite;
 
 	tempRead = fopen(inPath, "rb");
 
-  romWrite = fopen(outPath, "wb");
-  romRead = fopen(outPath, "rb");
+	romWrite = fopen(outPath, "wb");
+	romRead = fopen(outPath, "rb");
 
 	ifstream playerStats(playerStatsPath);
 	ifstream teamStats(teamStatsPath);
@@ -54,7 +81,7 @@ int Apply(const char* inPath, const char* teamStatsPath, const char* playerStats
 
 	while (getline(playerStats, line))
 	{
-    logFile << line << endl;
+    	logFile << line << endl;
 		stringstream lineStream(line);
 		string cell;
 
@@ -130,12 +157,11 @@ int Apply(const char* inPath, const char* teamStatsPath, const char* playerStats
 			unsigned int playerOffset;
 			unsigned char *bytes = ReadRom(romRead, curTeam->GetTeamAddress() + (4 * playerIndex), 4);
 			playerOffset = BytesToInt(bytes);
-			curTeam->SetPlayer(playerIndex, new Player(romRead, romWrite, playerOffset));
+			Player* curPlayer = new Player(romRead, romWrite, playerOffset);
 
 			int cellNumber = 0;
 			while (getline(lineStream, cell, ','))
 			{
-				Player* curPlayer = curTeam->GetPlayer(playerIndex);
 				switch (cellNumber)
 				{
 				case 1:
@@ -286,30 +312,124 @@ int Apply(const char* inPath, const char* teamStatsPath, const char* playerStats
 	teamStats.close();
 }
 
-void ApplyFilesToRom(const FunctionCallbackInfo<Value>& args) 
+int GetTeams(Team teams[], const char* inPath)
 {
-  Isolate* isolate = args.GetIsolate();
+	FILE* romRead;
+	romRead = fopen(inPath, "rb");
 
-  if(args.Length() < 4)
-  {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Wrong number of arguments")));
-    return;
-  }
+	if (!romRead)
+	{
+		return -1;
+	}
 
-  if(!args[0]->IsString() || !args[1]->IsString() || !args[2]->IsString() || !args[3]->IsString())
-  {
-    isolate->ThrowException(Exception::TypeError(
-        String::NewFromUtf8(isolate, "Wrong arguments")));
-    return;
-  }
+	TeamAddressSet* addressSets = TeamAddressSet::GetAddresses();
 
-  Apply(ToCString(args[0]->ToString()), ToCString(args[1]->ToString()), ToCString(args[2]->ToString()), ToCString(args[3]->ToString()));
+	for(int i = 0; i < 30; i++)
+	{
+		teams[i] = Team(romRead, NULL, addressSets[i].DataAddress, addressSets[i].MenuAddress);
+	}
+
+	return 0;
+}
+
+void ApplyFilesToRomConverter(const FunctionCallbackInfo<Value>& args) 
+{
+	if(!VerifyParameters(args, 4))
+	{
+		return;
+	}
+
+  	Apply(ToCString(args[0]->ToString()), ToCString(args[1]->ToString()), ToCString(args[2]->ToString()), ToCString(args[3]->ToString()));
+}
+
+void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
+
+	if(!VerifyParameters(args, 1))
+	{
+		return;
+	}
+
+	Isolate* isolate = args.GetIsolate();
+	
+	Team teams[30];
+	GetTeams(teams, ToCString(args[0]->ToString()));
+
+	Local<Array> myArray = Array::New(isolate);
+	for (int i = 0; i < 30; i++) 
+	{
+		Local<Object> team = Object::New(isolate);
+		team->Set(String::NewFromUtf8(isolate, "scoring"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_SCORING)));
+		team->Set(String::NewFromUtf8(isolate, "rebounds"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_REBOUNDS)));
+		team->Set(String::NewFromUtf8(isolate, "ballControl"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_BALLCONTROL)));
+		team->Set(String::NewFromUtf8(isolate, "defense"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_DEFENSE)));
+		team->Set(String::NewFromUtf8(isolate, "overall"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_OVERALL)));
+		team->Set(String::NewFromUtf8(isolate, "teamSelectBackgroundColor"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_TS_BACKGROUND_COLOR)));
+		team->Set(String::NewFromUtf8(isolate, "teamSelectBannerColor"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_TS_BANNER_COLOR)));
+		team->Set(String::NewFromUtf8(isolate, "teamSelectTextColor"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_TS_TEXT_COLOR)));
+		team->Set(String::NewFromUtf8(isolate, "dataAddress"), v8::Number::New(isolate, teams[i].GetTeamAddress()));
+		team->Set(String::NewFromUtf8(isolate, "menuAddress"), v8::Number::New(isolate, teams[i].GetMenuAddress()));
+		
+		Local<Array> localPlayers = Array::New(isolate);
+		Player** players = teams[i].GetPlayers();
+
+		for(int j = 0; j < 12; j++)
+		{
+			Local<Object> player = Object::New(isolate);
+			player->Set(String::NewFromUtf8(isolate, "number"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_NUMBER)));
+			player->Set(String::NewFromUtf8(isolate, "position"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_POSITION)));
+			player->Set(String::NewFromUtf8(isolate, "experience"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_EXP)));
+			player->Set(String::NewFromUtf8(isolate, "height"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_HEIGHT)));
+			player->Set(String::NewFromUtf8(isolate, "weight"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_WEIGHT)));
+			player->Set(String::NewFromUtf8(isolate, "university"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_UNIVERSITY)));
+			player->Set(String::NewFromUtf8(isolate, "skinColor"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_SKINCOLOR)));
+			player->Set(String::NewFromUtf8(isolate, "hair"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_HAIR)));
+			player->Set(String::NewFromUtf8(isolate, "sGames"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_GAMES)));
+			player->Set(String::NewFromUtf8(isolate, "sMinutes"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_MINUTES)));
+			player->Set(String::NewFromUtf8(isolate, "sMadeGoals"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_MADEGOALS)));
+			player->Set(String::NewFromUtf8(isolate, "sAttemptedGoals"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_ATTEMPTEDGOALS)));
+			player->Set(String::NewFromUtf8(isolate, "sMadeThrees"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_MADETHREES)));
+			player->Set(String::NewFromUtf8(isolate, "sAttemptedThrees"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_ATTEMPTEDTHREES)));
+			player->Set(String::NewFromUtf8(isolate, "sMadeFreeThrows"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_MADEFREETHROWS)));
+			player->Set(String::NewFromUtf8(isolate, "sAttemptedFreeThrows"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_ATTEMPTEDFREETHROWS)));
+			player->Set(String::NewFromUtf8(isolate, "sOffRebounds"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_OFFREBOUNDS)));
+			player->Set(String::NewFromUtf8(isolate, "sRebounds"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_REBOUNDS)));
+			player->Set(String::NewFromUtf8(isolate, "sAssists"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_ASSISTS)));
+			player->Set(String::NewFromUtf8(isolate, "sSteals"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_STEALS)));
+			player->Set(String::NewFromUtf8(isolate, "sPoints"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_POINTS)));
+			player->Set(String::NewFromUtf8(isolate, "sFouledOut"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_FOULEDOUT)));
+			player->Set(String::NewFromUtf8(isolate, "sFouls"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_FOULS)));
+			player->Set(String::NewFromUtf8(isolate, "rGoals"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_GOALS)));
+			player->Set(String::NewFromUtf8(isolate, "rThrees"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_THREES)));
+			player->Set(String::NewFromUtf8(isolate, "rFreeThrows"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_FREETHROW)));
+			player->Set(String::NewFromUtf8(isolate, "rDunking"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_DUNKING)));
+			player->Set(String::NewFromUtf8(isolate, "rStealing"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_STEALING)));
+			player->Set(String::NewFromUtf8(isolate, "rBlocks"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_BLOCKS)));
+			player->Set(String::NewFromUtf8(isolate, "rOffRebounding"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_OFFREBOUNDING)));
+			player->Set(String::NewFromUtf8(isolate, "rDefRebounding"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_DEFREBOUNDING)));
+			player->Set(String::NewFromUtf8(isolate, "rPassing"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_PASSING)));
+			player->Set(String::NewFromUtf8(isolate, "rOffAwareness"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_OFFAWARENESS)));
+			player->Set(String::NewFromUtf8(isolate, "rDefAwareness"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_DEFAWARENESS)));
+			player->Set(String::NewFromUtf8(isolate, "rSpeed"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_SPEED)));
+			player->Set(String::NewFromUtf8(isolate, "rQuickness"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_QUICKNESS)));
+			player->Set(String::NewFromUtf8(isolate, "rJumping"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_JUMPING)));
+			player->Set(String::NewFromUtf8(isolate, "rDribling"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_DRIBLING)));
+			player->Set(String::NewFromUtf8(isolate, "rStrength"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_STRENGTH)));
+
+			localPlayers->Set(j, player);
+		}
+
+		team->Set(String::NewFromUtf8(isolate, "players"), localPlayers);
+
+		myArray->Set(i, team);
+	}
+
+	args.GetReturnValue().Set(myArray);
 }
 
 void init(Local<Object> exports) 
 {
-  NODE_SET_METHOD(exports, "ApplyFilesToRom", ApplyFilesToRom);
+  NODE_SET_METHOD(exports, "ApplyFilesToRom", ApplyFilesToRomConverter);
+  NODE_SET_METHOD(exports, "GetTeams", GetTeamsConverter);
 }
 
 NODE_MODULE(addon, init)

@@ -276,3 +276,52 @@ unsigned char StringHexToChar(string s)
 
 	return retVal;
 }
+
+TeamAddressSet::TeamAddressSet()
+{
+
+}
+
+TeamAddressSet::TeamAddressSet(unsigned int dataAddress, unsigned int menuAddress)
+{
+	this->DataAddress = dataAddress;
+	this->MenuAddress = menuAddress;
+}
+
+TeamAddressSet* TeamAddressSet::GetAddresses()
+{
+	TeamAddressSet addresses[30];
+
+	addresses[0] = TeamAddressSet(T_0, M_0);
+	addresses[1] = TeamAddressSet(T_1, M_1);
+	addresses[2] = TeamAddressSet(T_2, M_2);
+	addresses[3] = TeamAddressSet(T_3, M_3);
+	addresses[4] = TeamAddressSet(T_4, M_4);
+	addresses[5] = TeamAddressSet(T_5, M_5);
+	addresses[6] = TeamAddressSet(T_6, M_6);
+	addresses[7] = TeamAddressSet(T_7, M_7);
+	addresses[8] = TeamAddressSet(T_8, M_8);
+	addresses[9] = TeamAddressSet(T_9, M_9);
+	addresses[10] = TeamAddressSet(T_10, M_10);
+	addresses[11] = TeamAddressSet(T_11, M_11);
+	addresses[12] = TeamAddressSet(T_12, M_12);
+	addresses[13] = TeamAddressSet(T_13, M_13);
+	addresses[14] = TeamAddressSet(T_14, M_14);
+	addresses[15] = TeamAddressSet(T_15, M_15);
+	addresses[16] = TeamAddressSet(T_16, M_16);
+	addresses[17] = TeamAddressSet(T_17, M_17);
+	addresses[18] = TeamAddressSet(T_18, M_18);
+	addresses[19] = TeamAddressSet(T_19, M_19);
+	addresses[20] = TeamAddressSet(T_20, M_20);
+	addresses[21] = TeamAddressSet(T_21, M_21);
+	addresses[22] = TeamAddressSet(T_22, M_22);
+	addresses[23] = TeamAddressSet(T_23, M_23);
+	addresses[24] = TeamAddressSet(T_24, M_24);
+	addresses[25] = TeamAddressSet(T_25, M_25);
+	addresses[26] = TeamAddressSet(T_26, M_26);
+	addresses[27] = TeamAddressSet(T_27, M_27);
+	addresses[28] = TeamAddressSet(T_28, M_28);
+	addresses[29] = TeamAddressSet(T_29, M_29);
+
+	return addresses;
+}

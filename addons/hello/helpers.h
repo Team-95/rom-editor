@@ -34,3 +34,17 @@ unsigned short StringToShort(string s);
 void TeamOffsetsFromAbbreviation(string cellVal, unsigned int &teamOffset, unsigned int &menuOffset);
 
 unsigned char StringHexToChar(string s);
+
+class TeamAddressSet
+{
+    public:
+        unsigned int DataAddress;
+        unsigned int MenuAddress;
+
+        TeamAddressSet();
+        TeamAddressSet(unsigned int dataAddress, unsigned int menuAddress);
+
+        static TeamAddressSet* GetAddresses();
+};
+
+TeamAddressSet TEAM_ADDRESSES[];

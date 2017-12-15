@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import addon from '../../addon';
+import { RomService } from 'app/providers/rom.service';
 
 const { exec } = require('child_process');
 
@@ -12,7 +13,8 @@ enum MenuItem {
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers: [RomService]
 })
 export class HomeComponent implements OnInit {
   
@@ -26,7 +28,7 @@ export class HomeComponent implements OnInit {
   sectionEnum = MenuItem;
   selectedSection: MenuItem = MenuItem.ROM;
 
-  constructor() { }
+  constructor(private romService: RomService) { }
 
   ngOnInit() {
   }
@@ -59,7 +61,16 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  submit(f){
+  load(){
+    try{
+      this.romService.LoadROM(this.inputPath);
+    }
+    catch(e){
+      console.log((<Error>e).message);
+    }
+  }
+
+  submit(){
     try{
       addon.ApplyFilesToRom(this.inputPath, this.teamStatsPath, this.playerStatsPath, this.outputPath);
       this.lastSuccessfulOutput = this.outputPath;

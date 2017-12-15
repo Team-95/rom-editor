@@ -20,7 +20,8 @@ public:
 	//void SetTeamAddress(unsigned int off);
 
 	Player* GetPlayer(int index);
-	void SetPlayer(int index, Player * player);
+	Player** GetPlayers();
+	// void SetPlayer(int index, Player * player);
 
 	void SetAttribute(unsigned int attribute, unsigned char value);
 	unsigned short GetAttribute(unsigned int attribute);

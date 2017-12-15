@@ -21,7 +21,7 @@
 
       <div id="rom-section" [hidden]="selectedSection != sectionEnum.ROM">
         <h3>ROM Editing</h3>
-        <form #form="ngForm" (ngSubmit)="submit(form)">
+        <form #form="ngForm" (ngSubmit)="load()">
 
           <div class="form-group">
             <label for="inputRom">Input Rom</label>
@@ -39,7 +39,7 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="outputRom">Output Rom</label>
             <div class="clearfix"></div>
             <div class="file-section">
@@ -53,9 +53,9 @@
             <div class="alert alert-danger" *ngIf="outputRom.invalid && outputRom.touched">
               <div *ngIf="outputRom.errors.required">Output file path is required</div>
             </div>
-          </div>
+          </div> -->
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="teamStats">Team Stats</label>
             <div class="clearfix"></div>
             <div class="file-section">
@@ -85,7 +85,7 @@
             <div class="alert alert-danger" *ngIf="playerStats.invalid && playerStats.touched">
               <div *ngIf="playerStats.errors.required">Player stats file path is required</div>
             </div>
-          </div>
+          </div> -->
         
           <button class="btn btn-primary" [disabled]="!form.valid">Apply</button>
         </form>
