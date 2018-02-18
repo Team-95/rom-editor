@@ -15,13 +15,12 @@ public:
 
 	unsigned int GetMenuAddress();
 	unsigned int GetTeamAddress();
-
-	//void SetMenuAddress(unsigned int off);
-	//void SetTeamAddress(unsigned int off);
+	unsigned char* GetCourtName();
+	unsigned char* GetLocation();
+	unsigned char* GetTeamName();
 
 	Player* GetPlayer(int index);
 	Player** GetPlayers();
-	// void SetPlayer(int index, Player * player);
 
 	void SetAttribute(unsigned int attribute, unsigned char value);
 	unsigned short GetAttribute(unsigned int attribute);
@@ -47,6 +46,6 @@ private:
 
 	unsigned char * courtName;
 	unsigned char * location;
-	unsigned char * teamName;
+	unsigned char teamName[30];
 
 };

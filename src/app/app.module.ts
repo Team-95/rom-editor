@@ -7,17 +7,21 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
+import { MessageComponent} from './components/message/message.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { ElectronService } from './providers/electron.service';
 import { InputFormatDirective } from './input-format.directive';
+import { FileComponent } from './components/file/file.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    InputFormatDirective
+    MessageComponent,
+    InputFormatDirective,
+    FileComponent
   ],
   imports: [
     BrowserModule,

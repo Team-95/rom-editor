@@ -19,8 +19,19 @@ Team::Team(FILE* romR, FILE* romW, unsigned int teamAddress, unsigned int menuAd
 	tsBannerColor = BytesToChar(ReadRom(romRead, tOffset + TEAM_TS_BANNER_COLOR));
 	tsTextColor = BytesToChar(ReadRom(romRead, tOffset + TEAM_TS_TEXT_COLOR));
 
-	for(int i = 0; i < 12; i++)
-	{
+	// fseek(romR, tOffset + TEAM_TEAMNAME_ADDRESS, SEEK_SET);
+	// int ch;
+
+	// for (int i = 0; true; i++) {
+
+	// 	ch = fgetc(romRead);
+	// 	teamName[i] = ch;
+	// 	if (ch == 0) {
+	// 		break;
+	// 	}
+	// }
+
+	for (int i = 0; i < 12; i++) {
 		unsigned char * playerAddressArray = ReadRom(romRead, tOffset + TEAM_PLAYER1 + (i * 4), 4);
 		unsigned int playerAddress = BytesToInt(playerAddressArray);
 		//delete[] playerAddressArray;
@@ -86,12 +97,18 @@ void Team::SetAttribute(unsigned int attribute, unsigned char value)
 	}
 	WriteRom(romWrite, tOffset + attribute, &value);
 }
-
-// void Team::SetPlayer(int index, Player * player)
-// {
-// 	players[index] = player;
-// 	//WriteRom(romWrite, tOffset + (4 * index), IntToBytes(player->GetOffset()), 4);
-// }
+unsigned char* Team::GetCourtName()
+{
+	return courtName;
+}
+unsigned char* Team::GetLocation()
+{
+	return location;
+}
+unsigned char* Team::GetTeamName()
+{
+	return teamName;
+}
 
 Player* Team::GetPlayer(int index)
 {

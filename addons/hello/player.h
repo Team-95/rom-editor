@@ -22,7 +22,9 @@ public:
 	void SetAttribute(unsigned int attribute, unsigned short value, bool adjust = false);
 	void SetName(const char nam[]);
 	unsigned short GetAttribute(unsigned int attribute);
-	string GetName();
+	unsigned char* GetFirstName();
+	unsigned char* GetLastName();
+	int GetNameSize();
 	unsigned int GetOffset();
 
 private:
@@ -75,7 +77,9 @@ private:
 	unsigned char rDribling;
 	unsigned char rStrength;
 
-	unsigned char * name;
+	unsigned char firstName[30];
+	unsigned char lastName[30];
+
 	int nameSize;
 
 };

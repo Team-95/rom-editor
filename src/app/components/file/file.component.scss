@@ -1,0 +1,24 @@
+input[type='file'] {
+    width:100%;
+    height:100%;
+    opacity:0;
+    position: absolute;
+}
+
+.file-section{
+  width:96px;
+  display:inline-block;
+  position:relative;
+  cursor: pointer;
+
+  input{
+    cursor: pointer;
+  }
+  span{
+    cursor: pointer;
+  }
+}
+
+.file-value{
+  width:calc(100% - 100px); display:inline-block
+}

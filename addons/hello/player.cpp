@@ -3,7 +3,7 @@
 #include <cstring>
 
 Player::Player(){
-	name = NULL;
+
 }
 
 Player::Player(FILE *romR, FILE* romW, unsigned int &off, bool byRef){ // New Player
@@ -13,7 +13,6 @@ Player::Player(FILE *romR, FILE* romW, unsigned int &off, bool byRef){ // New Pl
 	off += PLAYER_SIZE;	
 
 	nameSize = 24;
-	name = new unsigned char[24];
 
 	SetName("Brendan Murphy");
 
@@ -73,6 +72,8 @@ Player::Player(FILE *romR, FILE* romW, unsigned int off)
 	// Get the length of the name
 	fseek(romR, playerOffset + PLAYER_NAME, SEEK_SET);
 	int zeroCount = 0;
+	int fCount = 0;
+	int lCount = 0;
 	int ch;
 
 	do
@@ -83,17 +84,22 @@ Player::Player(FILE *romR, FILE* romW, unsigned int off)
 		{
 			zeroCount++;
 		}
+		else if(zeroCount == 0)
+		{
+			lastName[lCount] = ch;
+			lCount++;
+		}
+		else if(zeroCount == 1)
+		{
+			firstName[fCount] = ch;
+			fCount++;
+		}
 	} 
 	while (zeroCount < 2);
 	nameSize--;
 
-	// Set name to what is on the ROM
-	name = ReadRom(romRead, playerOffset + PLAYER_NAME, nameSize);
-	// Set values after name to 0
-	for (int i = nameSize; i < 30; i++)
-	{
-		name[i] = 0;
-	}
+	firstName[fCount] = 0;
+	lastName[lCount] = 0;
 
 	experience = BytesToChar(ReadRom(romRead, playerOffset + PLAYER_EXP));
 	university = BytesToChar(ReadRom(romRead, playerOffset + PLAYER_UNIVERSITY));
@@ -145,8 +151,7 @@ Player::Player(FILE *romR, FILE* romW, unsigned int off)
 
 Player::~Player()
 {
-	if (name)
-		delete name;
+
 }
 
 unsigned int Player::GetOffset(){ return playerOffset; }
@@ -297,77 +302,82 @@ void Player::SetAttribute(unsigned int attribute, unsigned short value, bool adj
 		delete temp;
 	}
 }
+
+int Player::GetNameSize() {
+	return nameSize;
+}
+
 void Player::SetName(const char nam[])
 {
 	// Set name to all zeros
-	for (int i = 0; i < 30; i++)
-	{
-		name[i] = 0;
-	}
+	// for (int i = 0; i < 30; i++)
+	// {
+	// 	name[i] = 0;
+	// }
 
-	char firstName[30];
-	char lastName[30];
+	// char firstName[30];
+	// char lastName[30];
 
-	for (int j = 0; j < 30; j++)
-	{
-		firstName[j] = '\0';
-		lastName[j] = '\0';
-	}
+	// for (int j = 0; j < 30; j++)
+	// {
+	// 	firstName[j] = '\0';
+	// 	lastName[j] = '\0';
+	// }
 
-	int i = 0;
-	for (; i < 30; i++)
-	{
-		if (nam[i] == ' ')
-		{
-			break;
-		}
-		firstName[i] = nam[i];
-	}
+	// int i = 0;
+	// for (; i < 30; i++)
+	// {
+	// 	if (nam[i] == ' ')
+	// 	{
+	// 		break;
+	// 	}
+	// 	firstName[i] = nam[i];
+	// }
 
-	i++;
-	int k = i;
-	for (; i - k < nameSize - 2; i++)
-	{
-		if (nam[i] == ' ')
-		{
-			break;
-		}
-		lastName[i-k] = nam[i];
-	}
+	// i++;
+	// int k = i;
+	// for (; i - k < nameSize - 2; i++)
+	// {
+	// 	if (nam[i] == ' ')
+	// 	{
+	// 		break;
+	// 	}
+	// 	lastName[i-k] = nam[i];
+	// }
 
-	i = 0;
-	k = 0;
+	// i = 0;
+	// k = 0;
 
-	for (;; i++)
-	{
-		if (lastName[i] == '\0')
-		{
-			break;
-		}
-		name[i] = lastName[i];
-	}
-	name[i] = 0;
-	i++;
+	// for (;; i++)
+	// {
+	// 	if (lastName[i] == '\0')
+	// 	{
+	// 		break;
+	// 	}
+	// 	name[i] = lastName[i];
+	// }
+	// name[i] = 0;
+	// i++;
 
-	if (strlen(lastName) + strlen(firstName) > nameSize - 1)
-	{
-		name[i] = firstName[0];
-		name[i + 1] = '.';
-	}
-	else
-	{
-		k = i;
-		for (;; i++)
-		{
-			if (firstName[i - k] == '\0')
-			{
-				break;
-			}
-			name[i] = firstName[i - k];
-		}
-	}
+	// if (strlen(lastName) + strlen(firstName) > nameSize - 1)
+	// {
+	// 	name[i] = firstName[0];
+	// 	name[i + 1] = '.';
+	// }
+	// else
+	// {
+	// 	k = i;
+	// 	for (;; i++)
+	// 	{
+	// 		if (firstName[i - k] == '\0')
+	// 		{
+	// 			break;
+	// 		}
+	// 		name[i] = firstName[i - k];
+	// 	}
+	// }
 
-	WriteRom(romWrite, playerOffset + PLAYER_NAME, name, nameSize);
+	// WriteRom(romWrite, playerOffset + PLAYER_NAME, name, nameSize);
 }
 
 unsigned short Player::GetAttribute(unsigned int attribute)
@@ -456,8 +466,13 @@ unsigned short Player::GetAttribute(unsigned int attribute)
 	}
 		return 0;
 }
-string Player::GetName()
+
+unsigned char* Player::GetFirstName()
 {
-	string returnVal((char*)name);
-	return returnVal;
+	return firstName;
+}
+
+unsigned char* Player::GetLastName()
+{
+	return lastName;
 }

@@ -23,8 +23,7 @@ using v8::Value;
 using v8::Array;
 using v8::Number;
 
-bool VerifyParameters(const FunctionCallbackInfo<Value>& args, int count)
-{
+bool VerifyParameters(const FunctionCallbackInfo<Value>& args, int count) {
 	Isolate* isolate = args.GetIsolate();
 
   	if(args.Length() != count)
@@ -48,8 +47,7 @@ bool VerifyParameters(const FunctionCallbackInfo<Value>& args, int count)
 	return true;
 }
 
-int Apply(const char* inPath, const char* teamStatsPath, const char* playerStatsPath, const char* outPath)
-{
+int Apply(const char* inPath, const char* teamStatsPath, const char* playerStatsPath, const char* outPath) {
 	std::ofstream logFile("logfile.txt");
 	logFile << "set method called" << endl;
 	FILE *tempRead;
@@ -312,30 +310,25 @@ int Apply(const char* inPath, const char* teamStatsPath, const char* playerStats
 	teamStats.close();
 }
 
-int GetTeams(Team teams[], const char* inPath)
-{
+int GetTeams(Team teams[], const char* inPath) {
 	FILE* romRead;
 	romRead = fopen(inPath, "rb");
 
-	if (!romRead)
-	{
+	if (!romRead) {
 		return -1;
 	}
 
 	TeamAddressSet* addressSets = TeamAddressSet::GetAddresses();
 
-	for(int i = 0; i < 30; i++)
-	{
+	for(int i = 0; i < 30; i++) {
 		teams[i] = Team(romRead, NULL, addressSets[i].DataAddress, addressSets[i].MenuAddress);
 	}
 
 	return 0;
 }
 
-void ApplyFilesToRomConverter(const FunctionCallbackInfo<Value>& args) 
-{
-	if(!VerifyParameters(args, 4))
-	{
+void ApplyFilesToRomConverter(const FunctionCallbackInfo<Value>& args) {
+	if(!VerifyParameters(args, 4)) {
 		return;
 	}
 
@@ -368,6 +361,9 @@ void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
 		team->Set(String::NewFromUtf8(isolate, "teamSelectTextColor"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_TS_TEXT_COLOR)));
 		team->Set(String::NewFromUtf8(isolate, "dataAddress"), v8::Number::New(isolate, teams[i].GetTeamAddress()));
 		team->Set(String::NewFromUtf8(isolate, "menuAddress"), v8::Number::New(isolate, teams[i].GetMenuAddress()));
+		//team->Set(String::NewFromUtf8(isolate, "courtName"), String::NewFromUtf8(isolate, ((char*)teams[i].GetCourtName())));
+		//team->Set(String::NewFromUtf8(isolate, "location"), String::NewFromUtf8(isolate, ((char*)teams[i].GetLocation())));
+		team->Set(String::NewFromUtf8(isolate, "teamName"), String::NewFromUtf8(isolate, ((char*)teams[i].GetTeamName())));
 		
 		Local<Array> localPlayers = Array::New(isolate);
 		Player** players = teams[i].GetPlayers();
@@ -392,9 +388,11 @@ void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
 			player->Set(String::NewFromUtf8(isolate, "sMadeFreeThrows"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_MADEFREETHROWS)));
 			player->Set(String::NewFromUtf8(isolate, "sAttemptedFreeThrows"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_ATTEMPTEDFREETHROWS)));
 			player->Set(String::NewFromUtf8(isolate, "sOffRebounds"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_OFFREBOUNDS)));
+			player->Set(String::NewFromUtf8(isolate, "sBlocks"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_BLOCKS)));
 			player->Set(String::NewFromUtf8(isolate, "sRebounds"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_REBOUNDS)));
 			player->Set(String::NewFromUtf8(isolate, "sAssists"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_ASSISTS)));
 			player->Set(String::NewFromUtf8(isolate, "sSteals"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_STEALS)));
+			player->Set(String::NewFromUtf8(isolate, "sTurnovers"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_TURNOVERS)));
 			player->Set(String::NewFromUtf8(isolate, "sPoints"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_POINTS)));
 			player->Set(String::NewFromUtf8(isolate, "sFouledOut"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_FOULEDOUT)));
 			player->Set(String::NewFromUtf8(isolate, "sFouls"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_S_FOULS)));
@@ -414,6 +412,10 @@ void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
 			player->Set(String::NewFromUtf8(isolate, "rJumping"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_JUMPING)));
 			player->Set(String::NewFromUtf8(isolate, "rDribling"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_DRIBLING)));
 			player->Set(String::NewFromUtf8(isolate, "rStrength"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_R_STRENGTH)));
+			player->Set(String::NewFromUtf8(isolate, "playerOffset"), v8::Number::New(isolate, players[j]->GetOffset()));
+			player->Set(String::NewFromUtf8(isolate, "firstName"), String::NewFromUtf8(isolate, ((char*)players[j]->GetFirstName())));
+			player->Set(String::NewFromUtf8(isolate, "lastName"), String::NewFromUtf8(isolate, ((char*)players[j]->GetLastName())));
+			player->Set(String::NewFromUtf8(isolate, "nameSize"), v8::Number::New(isolate, players[j]->GetNameSize()));
 
 			localPlayers->Set(j, player);
 		}
@@ -426,8 +428,7 @@ void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
 	args.GetReturnValue().Set(myArray);
 }
 
-void init(Local<Object> exports) 
-{
+void init(Local<Object> exports) {
   NODE_SET_METHOD(exports, "ApplyFilesToRom", ApplyFilesToRomConverter);
   NODE_SET_METHOD(exports, "GetTeams", GetTeamsConverter);
 }

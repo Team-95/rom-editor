@@ -2,10 +2,10 @@ import { Player } from './player';
 
 export class Team {
     
-    team: Player [] = [];
+    players: Player [] = [];
 
-    mOffset: Number;
-	tOffset: Number;
+    dataAddress: Number;
+	menuAddress: Number;
 
 	scoring: Number;
 	rebounds: Number;

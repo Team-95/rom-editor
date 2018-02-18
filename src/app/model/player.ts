@@ -46,7 +46,8 @@ export class Player {
     rDribling: Number;
     rStrength: Number;
 
-    name: String;
+    firstName: String;
+    lastName: String;
     nameSize: Number;
 
     constructor() {
