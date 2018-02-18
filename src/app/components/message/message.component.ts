@@ -29,7 +29,7 @@ export class MessageComponent implements OnInit {
     switch (this.message.type) {
       case UIMessageType.info: return 'black';
       case UIMessageType.error: return 'red';
-      case UIMessageType.success: return 'green';
+      case UIMessageType.success: return '#1DB954';
       case UIMessageType.warn: return 'yellow';
       default: return 'black';
     }

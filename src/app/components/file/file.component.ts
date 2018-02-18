@@ -7,8 +7,7 @@ const { exec } = require('child_process');
 @Component({
   selector: 'file-page',
   templateUrl: './file.component.html',
-  styleUrls: ['./file.component.scss'],
-  providers: [RomService]
+  styleUrls: ['./file.component.scss']
 })
 export class FileComponent implements OnInit {
 

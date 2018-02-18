@@ -14,6 +14,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { ElectronService } from './providers/electron.service';
 import { InputFormatDirective } from './input-format.directive';
 import { FileComponent } from './components/file/file.component';
+import { StatsComponent } from './components/stats/stats.component';
+import { RomService } from './providers/rom.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { FileComponent } from './components/file/file.component';
     HomeComponent,
     MessageComponent,
     InputFormatDirective,
-    FileComponent
+    FileComponent,
+    StatsComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,10 @@ import { FileComponent } from './components/file/file.component';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [ElectronService],
+  providers: [
+    ElectronService,
+    RomService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

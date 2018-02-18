@@ -1,6 +1,6 @@
 #left-panel{
   width:150px;
-  background-color: #282A29;
+  background-color: #121212;
   height: 100%;
   float: left;
 }
@@ -10,23 +10,11 @@
   width: calc(100% - 150px);
   overflow: auto;
   padding:30px;
+  background-color: #181818;
 }
 
 #app-body{
   height: calc(100% - 32px);
-}
-
-.nav-tabs {
-    border: none;
-}
-
-.nav-tabs > li > a {
-    border-radius: 0 0 0 0;
-}
-
-.nav > li > a:focus {
-    text-decoration: none;
-    background-color: transparent;
 }
 
 .panel-group{

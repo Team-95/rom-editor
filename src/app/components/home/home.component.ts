@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import addon from '../../addon';
 import { UIMessage, UIMessageType } from '../../model/uiMessage';
 
 enum MenuItem {

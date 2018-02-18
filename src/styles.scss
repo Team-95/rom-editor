@@ -8,7 +8,7 @@ html, body {
 body {
  padding: 0px;
  margin: 0px;
- border: 1px solid #2D2D30;
+ border: 1px solid #121212;
  position: absolute;
  top: 0px;
  left: 0px;
@@ -16,19 +16,15 @@ body {
  bottom: 0px;
 }
 
-
-
 #title-bar {
- background-color: #2D2D30;
+ background-color: #121212;
  -webkit-app-region: drag;
  height: 32px; 
  padding: 0px;
  margin: 0px; 
- color: #ADADAD;
+ color: white;
  font-family: sans-serif;
 }
-
-
 
 #title {
  position: fixed;
@@ -37,8 +33,6 @@ body {
  line-height: 32px;
  font-size: 14px;
 }
-
-
 
 #title-bar-btns {
  -webkit-app-region: no-drag;
@@ -69,10 +63,27 @@ body {
     background-color: transparent;
 }
 
-a{
+a, p, h3, label{
   color: white;
 }
 
+input, input.form-control {
+  background-color: gray;
+  border: 1px solid black;
+  color: white;
+}
+
+.nav-tabs {
+  border: none;
+}
+
+.nav-tabs > li > a {
+  border-radius: 0 0 0 0;
+}
+
+.nav > li > a:focus {
+  text-decoration: none;
+  background-color: transparent;
+}
 
 @import "~bootstrap/dist/css/bootstrap.css";
-
