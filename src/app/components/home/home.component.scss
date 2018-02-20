@@ -9,8 +9,13 @@
   height: 100%;
   width: calc(100% - 150px);
   overflow: auto;
-  padding:30px;
   background-color: #181818;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+#stats-section {
+  height: 100%;
 }
 
 #app-body{
@@ -20,8 +25,4 @@
 .panel-group{
   height: 100%;
   margin-bottom: 0 !important;
-}
-
-li{
-  cursor: pointer;
 }

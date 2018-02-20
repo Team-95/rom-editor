@@ -35,6 +35,9 @@ void TeamOffsetsFromAbbreviation(string cellVal, unsigned int &teamOffset, unsig
 
 unsigned char StringHexToChar(string s);
 
+// Returns length of text
+int GetText(unsigned int address, FILE* romRead, unsigned char* text, int length = -1);
+
 class TeamAddressSet
 {
     public:

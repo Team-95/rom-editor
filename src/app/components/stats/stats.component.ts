@@ -12,7 +12,7 @@ export class StatsComponent implements OnInit {
   noROMMessage: UIMessage = new UIMessage('No ROM loaded. Please load a ROM.', UIMessageType.warn);
 
   constructor(private romService: RomService) {
-    console.log(romService.rom);
+    
    }
 
   ngOnInit() {

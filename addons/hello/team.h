@@ -15,9 +15,14 @@ public:
 
 	unsigned int GetMenuAddress();
 	unsigned int GetTeamAddress();
-	unsigned char* GetCourtName();
 	unsigned char* GetLocation();
 	unsigned char* GetTeamName();
+	unsigned char* GetCourtLocation();
+	unsigned char* GetInitials();
+
+	int GetTeamNameSize();
+	int GetLocationSize();
+	int GetCourtLocationSize();
 
 	Player* GetPlayer(int index);
 	Player** GetPlayers();
@@ -44,8 +49,12 @@ private:
 	unsigned char tsBannerColor;
 	unsigned char tsTextColor;
 
-	unsigned char * courtName;
-	unsigned char * location;
+	unsigned char location[30];
 	unsigned char teamName[30];
-
+	unsigned char courtLocation[30];
+	unsigned char initials[5];
+	
+	int teamNameSize;
+	int locationSize;
+	int courtLocationSize;
 };

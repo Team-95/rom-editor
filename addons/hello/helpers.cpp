@@ -277,6 +277,25 @@ unsigned char StringHexToChar(string s)
 	return retVal;
 }
 
+int GetText(unsigned int address, FILE* romRead, unsigned char* text, int length) {
+	int size = 0;
+	int ch;
+
+	fseek(romRead, address, SEEK_SET);
+
+	for (int i = 0; ; i++) {
+		ch = fgetc(romRead);
+	 	text[i] = ch;
+		if(ch == 0 || (length > -1 && i == length - 1)) {
+			text[length] = 0;
+			break;
+		}
+	 	size++;
+	}
+
+	return size;
+}
+
 TeamAddressSet::TeamAddressSet()
 {
 

@@ -32,8 +32,13 @@ export class RomService {
             team.tsBackgroundColor = teamDto.teamSelectBackgroundColor;
             team.tsBannerColor = teamDto.teamSelectBannerColor;
             team.tsTextColor = teamDto.teamSelectTextColor;
-
-            // Missing team team, location, courtname
+            team.teamName = teamDto.teamName;
+            team.teamNameSize = teamDto.teamNameSize;
+            team.location = teamDto.location;
+            team.locationSize = teamDto.locationSize;
+            team.courtLocation = teamDto.courtLocation;
+            team.courtLocationSize = teamDto.courtLocationSize;
+            team.initials = teamDto.initials;
 
             for (let playerDto of teamDto.players) {
                 let player = new Player();
@@ -48,6 +53,7 @@ export class RomService {
                 player.number = playerDto.number;
                 player.playerOffset = playerDto.playerOffset;
                 player.position = playerDto.position;
+                player.weight = playerDto.weight + 100;
 
                 player.rBlocks = playerDto.rBlocks;
                 player.rDefAwareness = playerDto.rDefAwareness;
@@ -93,6 +99,10 @@ export class RomService {
         console.log(this.rom);
 
         return this.rom;
+    }
+
+    SaveROM(): void {
+        
     }
 
 }

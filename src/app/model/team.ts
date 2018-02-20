@@ -17,9 +17,14 @@ export class Team {
 	tsBannerColor: Number;
 	tsTextColor: Number;
 
-	courtName: String;
-	location: String;
 	teamName: String;
+	location: String;
+	courtLocation: String;
+	initials: String;
+
+	teamNameSize: Number;
+	locationSize: Number;
+	courtLocationSize: Number;
 
     constructor() {
 

@@ -2,8 +2,7 @@
 
 Team::Team(){}
 
-Team::Team(FILE* romR, FILE* romW, unsigned int teamAddress, unsigned int menuAddress)
-{
+Team::Team(FILE* romR, FILE* romW, unsigned int teamAddress, unsigned int menuAddress) {
 	romRead = romR;
 	romWrite = romW;
 	tOffset = teamAddress;
@@ -19,17 +18,27 @@ Team::Team(FILE* romR, FILE* romW, unsigned int teamAddress, unsigned int menuAd
 	tsBannerColor = BytesToChar(ReadRom(romRead, tOffset + TEAM_TS_BANNER_COLOR));
 	tsTextColor = BytesToChar(ReadRom(romRead, tOffset + TEAM_TS_TEXT_COLOR));
 
-	// fseek(romR, tOffset + TEAM_TEAMNAME_ADDRESS, SEEK_SET);
-	// int ch;
+	teamNameSize = 0;
+	locationSize = 0;
+	courtLocationSize = 0;
 
-	// for (int i = 0; true; i++) {
+	// Name
+	unsigned char * teamNameAddressArray = ReadRom(romRead, tOffset + TEAM_TEAMNAME_ADDRESS, 4);
+	unsigned int teamNameAddress = BytesToInt(teamNameAddressArray);
+	teamNameSize = GetText(teamNameAddress, romRead, teamName);
 
-	// 	ch = fgetc(romRead);
-	// 	teamName[i] = ch;
-	// 	if (ch == 0) {
-	// 		break;
-	// 	}
-	// }
+	// Location
+	unsigned char * locationAddressArray = ReadRom(romRead, tOffset + TEAM_TEAMLOCATION_ADDRESS, 4);
+	unsigned int locationAddress = BytesToInt(locationAddressArray);
+	locationSize = GetText(locationAddress, romRead, location);
+
+	// Court location
+	unsigned char * courtLocationAddressArray = ReadRom(romRead, tOffset + TEAM_COURTLOCATION_ADDRESS, 4);
+	unsigned int courtLocationAddress = BytesToInt(courtLocationAddressArray);
+	courtLocationSize = GetText(courtLocationAddress, romRead, courtLocation);
+
+	// Initials
+	GetText(tOffset + TEAM_INITIALS_ADDRESS, romRead, initials, 4);
 
 	for (int i = 0; i < 12; i++) {
 		unsigned char * playerAddressArray = ReadRom(romRead, tOffset + TEAM_PLAYER1 + (i * 4), 4);
@@ -44,8 +53,7 @@ Team::Team(FILE* romR, FILE* romW, unsigned int teamAddress, unsigned int menuAd
 unsigned int Team::GetMenuAddress(){ return mOffset; }
 unsigned int Team::GetTeamAddress(){ return tOffset; }
 
-unsigned short Team::GetAttribute(unsigned int attribute)
-{
+unsigned short Team::GetAttribute(unsigned int attribute) {
 	switch (attribute){
 	case TEAM_SCORING:
 		return scoring;
@@ -67,8 +75,7 @@ unsigned short Team::GetAttribute(unsigned int attribute)
 	return 0;
 }
 
-void Team::SetAttribute(unsigned int attribute, unsigned char value)
-{
+void Team::SetAttribute(unsigned int attribute, unsigned char value) {
 	switch (attribute){
 	case TEAM_SCORING:
 		scoring = value;
@@ -97,26 +104,38 @@ void Team::SetAttribute(unsigned int attribute, unsigned char value)
 	}
 	WriteRom(romWrite, tOffset + attribute, &value);
 }
-unsigned char* Team::GetCourtName()
-{
-	return courtName;
-}
-unsigned char* Team::GetLocation()
-{
+
+unsigned char* Team::GetLocation() {
 	return location;
 }
-unsigned char* Team::GetTeamName()
-{
+
+int Team::GetLocationSize() {
+	return locationSize;
+}
+
+unsigned char* Team::GetTeamName() {
 	return teamName;
 }
 
-Player* Team::GetPlayer(int index)
-{
+int Team::GetTeamNameSize() { return teamNameSize; }
+
+unsigned char* Team::GetCourtLocation() {
+	return courtLocation;
+}
+
+int Team::GetCourtLocationSize() {
+	return courtLocationSize;
+}
+
+unsigned char* Team::GetInitials() {
+	return initials;
+}
+
+Player* Team::GetPlayer(int index) {
 	return players[index];
 }
 
-Player** Team::GetPlayers()
-{
+Player** Team::GetPlayers() {
 	return players;
 }
  

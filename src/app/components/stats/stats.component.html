@@ -1,7 +1,7 @@
-<h3 style="margin-top:0px;">Statistics Editing</h3>
+<h3 class="section-header">Statistics Editing</h3>
 <ui-message *ngIf="!romService.rom" [message]="noROMMessage"></ui-message>
 <ng-container *ngIf="romService.rom">
-  <ul class="nav nav-tabs nav-stacked">
-      <li *ngFor="let team of romService.rom.teams"><a>{{team.overall}}</a></li>
+  <ul class="nav nav-tabs nav-stacked" id="team-list">
+      <li *ngFor="let team of romService.rom.teams"><a>{{team.teamName}}</a></li>
     </ul>
 </ng-container>

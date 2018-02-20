@@ -6,61 +6,60 @@ html, body {
 }
 
 body {
- padding: 0px;
- margin: 0px;
- border: 1px solid #121212;
- position: absolute;
- top: 0px;
- left: 0px;
- right: 0px;
- bottom: 0px;
+  padding: 0px;
+  margin: 0px;
+  border: 1px solid #121212;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
 }
 
 #title-bar {
- background-color: #121212;
- -webkit-app-region: drag;
- height: 32px; 
- padding: 0px;
- margin: 0px; 
- color: white;
- font-family: sans-serif;
+  background-color: #121212;
+  -webkit-app-region: drag;
+  height: 32px; 
+  padding: 0px;
+  margin: 0px; 
+  color: white;
+  font-family: sans-serif;
 }
 
 #title {
- position: fixed;
- top: 2px;
- left: 12px; 
- line-height: 32px;
- font-size: 14px;
+  position: fixed;
+  top: 2px;
+  left: 12px; 
+  line-height: 32px;
+  font-size: 14px;
 }
 
 #title-bar-btns {
- -webkit-app-region: no-drag;
- position: fixed;
- top: 1px;
- right: 0px; 
-
+  -webkit-app-region: no-drag;
+  position: fixed;
+  top: 1px;
+  right: 0px; 
 }
 
 #title-bar-btns button {
- height: 32px;
- width: 32px;
- background-color: transparent;
- border: none;
- outline: none;
- color: #F1F1F1;
- font-size: 16px;
+  height: 32px;
+  width: 32px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #F1F1F1;
+  font-size: 16px;
 }
 
 #title-bar-btns button:hover {
- background-color: #3F3F41;
+  background-color: #3F3F41;
 }
 
 ::-webkit-file-upload-button { cursor:pointer; }
 
 .nav > li > a:focus {
-    text-decoration: none;
-    background-color: transparent;
+  text-decoration: none;
+  background-color: transparent;
 }
 
 a, p, h3, label{
@@ -84,6 +83,28 @@ input, input.form-control {
 .nav > li > a:focus {
   text-decoration: none;
   background-color: transparent;
+}
+
+.section-header{
+  margin-top: 0px;
+}
+
+::-webkit-scrollbar {     
+  background-color:#181818;
+  width: .8em;
+  border-left: 1px solid #383838;
+  border-right: 1px solid #383838;
+}
+
+::-webkit-scrollbar-thumb:window-inactive,
+::-webkit-scrollbar-thumb {
+  background:  #424242;
+  border-left: 1px solid #383838;
+  border-right: 1px solid #383838;
+}
+
+li{
+  cursor: pointer;
 }
 
 @import "~bootstrap/dist/css/bootstrap.css";

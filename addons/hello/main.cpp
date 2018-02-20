@@ -335,10 +335,9 @@ void ApplyFilesToRomConverter(const FunctionCallbackInfo<Value>& args) {
   	Apply(ToCString(args[0]->ToString()), ToCString(args[1]->ToString()), ToCString(args[2]->ToString()), ToCString(args[3]->ToString()));
 }
 
-void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
+void GetTeamsConverter(const FunctionCallbackInfo<Value>& args) {
 
-	if(!VerifyParameters(args, 1))
-	{
+	if(!VerifyParameters(args, 1)) {
 		return;
 	}
 
@@ -348,8 +347,7 @@ void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
 	GetTeams(teams, ToCString(args[0]->ToString()));
 
 	Local<Array> myArray = Array::New(isolate);
-	for (int i = 0; i < 30; i++) 
-	{
+	for (int i = 0; i < 30; i++) {
 		Local<Object> team = Object::New(isolate);
 		team->Set(String::NewFromUtf8(isolate, "scoring"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_SCORING)));
 		team->Set(String::NewFromUtf8(isolate, "rebounds"), v8::Number::New(isolate, teams[i].GetAttribute(TEAM_REBOUNDS)));
@@ -364,12 +362,17 @@ void GetTeamsConverter(const FunctionCallbackInfo<Value>& args){
 		//team->Set(String::NewFromUtf8(isolate, "courtName"), String::NewFromUtf8(isolate, ((char*)teams[i].GetCourtName())));
 		//team->Set(String::NewFromUtf8(isolate, "location"), String::NewFromUtf8(isolate, ((char*)teams[i].GetLocation())));
 		team->Set(String::NewFromUtf8(isolate, "teamName"), String::NewFromUtf8(isolate, ((char*)teams[i].GetTeamName())));
+		team->Set(String::NewFromUtf8(isolate, "teamNameSize"), v8::Number::New(isolate, teams[i].GetTeamNameSize()));
+		team->Set(String::NewFromUtf8(isolate, "location"), String::NewFromUtf8(isolate, ((char*)teams[i].GetLocation())));
+		team->Set(String::NewFromUtf8(isolate, "locationSize"), v8::Number::New(isolate, teams[i].GetLocationSize()));
+		team->Set(String::NewFromUtf8(isolate, "courtLocation"), String::NewFromUtf8(isolate, ((char*)teams[i].GetCourtLocation())));
+		team->Set(String::NewFromUtf8(isolate, "courtLocationSize"), v8::Number::New(isolate, teams[i].GetCourtLocationSize()));
+		team->Set(String::NewFromUtf8(isolate, "initials"), String::NewFromUtf8(isolate, ((char*)teams[i].GetInitials())));
 		
 		Local<Array> localPlayers = Array::New(isolate);
 		Player** players = teams[i].GetPlayers();
 
-		for(int j = 0; j < 12; j++)
-		{
+		for (int j = 0; j < 12; j++) {
 			Local<Object> player = Object::New(isolate);
 			player->Set(String::NewFromUtf8(isolate, "number"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_NUMBER)));
 			player->Set(String::NewFromUtf8(isolate, "position"), v8::Number::New(isolate, players[j]->GetAttribute(PLAYER_POSITION)));

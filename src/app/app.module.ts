@@ -16,6 +16,7 @@ import { InputFormatDirective } from './input-format.directive';
 import { FileComponent } from './components/file/file.component';
 import { StatsComponent } from './components/stats/stats.component';
 import { RomService } from './providers/rom.service';
+import { TeamComponent } from './components/team/team.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { RomService } from './providers/rom.service';
     MessageComponent,
     InputFormatDirective,
     FileComponent,
-    StatsComponent
+    StatsComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule,
