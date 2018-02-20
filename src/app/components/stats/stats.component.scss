@@ -1,7 +1,15 @@
 #team-list {
-    width: 120px;
+    width: 130px;
     height: calc(100% - 36px);
     overflow-y: auto;
     overflow-x: hidden;
     margin-left: -10px;
+    float: left;
+}
+
+.stats-section {
+    float: left;
+    margin-left: 20px;
+    overflow: auto;
+    width: calc(100% - 140px);
 }

@@ -6,9 +6,9 @@
     <div class="clearfix"></div>
     <div class="file-section">
       <input type="file" id="inputRomFile" (change)="handleInputFileChange($event)"> 
-      <span class="btn btn-info">Select File</span>
+      <span class="btn btn-success">Select File</span>
     </div>
-    <input id="inputRom" type="text" class="form-control" name="inputRom" class="file-value form-control"
+    <input id="inputRom" type="text" name="inputRom" class="file-value"
     [(ngModel)]="inputPath"
     #inputRom="ngModel"
     required/>
@@ -65,7 +65,7 @@
     </div>
   </div> -->
 
-  <button class="btn btn-primary" [disabled]="!form.valid">Load</button>
+  <button class="btn btn-success" style="width:92px;" [disabled]="!form.valid">Load</button>
   <ui-message [message]="loadMessage"></ui-message>
 </form>
 

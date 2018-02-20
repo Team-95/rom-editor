@@ -1,3 +1,78 @@
-<p>
-  team works!
-</p>
+<div *ngIf="team">
+
+  <div style="overflow:auto;">
+      <div class="team-stat-section">
+        <h4>Name and Location</h4>
+        <div>
+          <label class="property-label">Name</label>
+          <input [(ngModel)]="team.teamName" maxlength="{{team.teamNameSize}}"/>
+        </div>
+        <div>
+          <label class="property-label">Location</label>
+          <input [(ngModel)]="team.location" maxlength="{{team.locationSize}}"/>
+        </div>
+        <div>
+          <label class="property-label">Court Location</label>
+          <input [(ngModel)]="team.courtLocation" maxlength="{{team.courtLocationSize}}"/>
+        </div>
+        <div>
+          <label class="property-label">Abreviation</label>
+          <input [(ngModel)]="team.initials" maxlength="4" style="text-transform:uppercase"/>
+        </div>
+      </div>
+    
+      <div class="team-stat-section">
+        <h4>Ranks</h4>
+        <div>
+          <label class="property-label">Scoring</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.scoring"/>
+        </div>
+        <div>
+          <label class="property-label">Rebounds</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.rebounds"/>
+        </div>
+        <div>
+          <label class="property-label">Ball Control</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.ballControl"/>
+        </div>
+        <div>
+          <label class="property-label">Defense</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.defense"/>
+        </div>
+        <div>
+          <label class="property-label">Overall</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.overall"/>
+        </div>
+      </div>
+    
+      <div class="team-stat-section">
+        <h4>Team Select Colors</h4>
+        <div>
+          <label class="property-label">Background</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.tsBackgroundColor"/>
+        </div>
+        <div>
+          <label class="property-label">Banner</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.tsBannerColor"/>
+        </div>
+        <div>
+          <label class="property-label">Text</label>
+          <input type="number" max="29" min="0" [(ngModel)]="team.tsTextColor"/>
+        </div>
+      </div>
+  </div>
+
+  <div style="overflow:auto;">
+      <div>
+        <h4>Players</h4>
+        <select [(ngModel)]="selectPlayer" style="width:160px;">
+          <option *ngFor="let player of team.players" ngValue="player">{{player.firstName + ' ' + player.lastName}}</option>
+        </select>
+      </div>
+  </div>
+
+</div>
+
+<div *ngIf="!team">
+  <ui-message [message]="noTeamMessage"></ui-message>
+</div>
