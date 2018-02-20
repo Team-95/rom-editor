@@ -65,10 +65,11 @@
   <div style="overflow:auto;">
       <div>
         <h4>Players</h4>
-        <select [(ngModel)]="selectPlayer" style="width:160px;">
-          <option *ngFor="let player of team.players" ngValue="player">{{player.firstName + ' ' + player.lastName}}</option>
+        <select [(ngModel)]="selectedPlayer" style="width:160px;">
+          <option *ngFor="let player of team.players" [ngValue]="player">{{player.firstName + ' ' + player.lastName}}</option>
         </select>
       </div>
+      <player [player]="selectedPlayer"></player>
   </div>
 
 </div>

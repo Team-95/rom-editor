@@ -17,6 +17,7 @@ import { FileComponent } from './components/file/file.component';
 import { StatsComponent } from './components/stats/stats.component';
 import { RomService } from './providers/rom.service';
 import { TeamComponent } from './components/team/team.component';
+import { PlayerComponent } from './components/player/player.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { TeamComponent } from './components/team/team.component';
     InputFormatDirective,
     FileComponent,
     StatsComponent,
-    TeamComponent
+    TeamComponent,
+    PlayerComponent
   ],
   imports: [
     BrowserModule,
